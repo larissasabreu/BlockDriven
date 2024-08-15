@@ -14,10 +14,9 @@ CREATE TABLE movies (
 	category_id INTEGER REFERENCES "categories"("id") NOT NULL
 );
 
-
 CREATE TABLE actors (
 	id SERIAL PRIMARY KEY,
-	name TEXT NOT NULL,
+	name TEXT NOT NULL UNIQUE,
 	born DATE NOT NULL,
 	country_id INTEGER REFERENCES "countries"("id") NOT NULL
 );
@@ -41,13 +40,20 @@ CREATE TABLE phones (
 	phone_2 VARCHAR(11) NOT NULL --DDD + número = 11
 );
 
+CREATE TABLE cities (
+	id SERIAL PRIMARY KEY,
+	state TEXT NOT NULL,
+	city TEXT NOT NULL
+);
+
 CREATE TABLE address (
 	id SERIAL PRIMARY KEY, 
 	state TEXT NOT NULL,
 	city TEXT NOT NULL,
 	street TEXT NOT NULL,
 	house_number TEXT NOT NULL,
-	complement TEXT
+	complement TEXT,
+	CEP VARCHAR(8)
 );
 
 CREATE TABLE customers (
@@ -69,10 +75,11 @@ CREATE TABLE ratings (
 CREATE TABLE rental (
 	id SERIAL PRIMARY KEY,
 	customer_id INTEGER REFERENCES "customers"("id") NOT NULL,
+	movie_id INTEGER REFERENCES "movies"("id") NOT NULL,
 	disc_id INTEGER REFERENCES "discs"("id") NOT NULL,
 	rental_date TIMESTAMP NOT NULL DEFAULT NOW(),
 	return_limit DATE NOT NULL,
 	return_date DATE,
-	rating_id INTEGER REFERENCES "ratings"("id") NOT NULL,
+	rating_id INTEGER REFERENCES "ratings"("id"),
 	fine INTEGER
 );
